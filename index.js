@@ -18,11 +18,18 @@ app.use(express.json());
 const uri = `mongodb+srv://${process.env.db_user}:${process.env.db_password}@cluster0.jnuj2ye.mongodb.net/?retryWrites=true&w=majority`;
 console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-    const collection = client.db("test").collection("devices");
-    // perform actions on the collection object
-    client.close();
-});
+
+const categoriesCollection = client.db('assignment12').collection('categories');
+
+
+
+//get all categories
+
+app.get('/categories', async (req, res) => {
+    const categories = await categoriesCollection.find({}).toArray();
+    res.send(categories);
+})
+
 
 
 app.get('/', (req, res) => {
