@@ -81,6 +81,23 @@ app.patch('/advertise/:id', (req, res) => {
     res.send({ hello: 'hello' })
 })
 
+
+//get all sellers
+
+app.get('/sellers', async (req, res) => {
+    const query = { role: 'seller' };
+    const users = await usersCollection.find(query).toArray();
+    res.send(users);
+})
+
+//delete a seller
+app.delete('/seller/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+    const result = await usersCollection.deleteOne(query);
+    res.send(result);
+})
+
 app.get('/', (req, res) => {
     res.send('hello');
 })
