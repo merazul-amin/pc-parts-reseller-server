@@ -42,6 +42,13 @@ app.post('/users', async (req, res) => {
     res.send(result);
 })
 
+//get user role
+app.get('/role/:email', async (req, res) => {
+    const email = req.params.email;
+    const query = { email };
+    const role = await usersCollection.findOne(query);
+    res.send(role);
+})
 
 
 app.get('/', (req, res) => {
