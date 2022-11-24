@@ -16,6 +16,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const categoriesCollection = client.db('assignment12').collection('categories');
 const productsCollection = client.db('assignment12').collection('products');
 const usersCollection = client.db('assignment12').collection('users');
+const sellersProductsCollection = client.db('assignment12').collection('sellersProducts');
 
 //get all categories
 
@@ -48,6 +49,14 @@ app.get('/role/:email', async (req, res) => {
     const query = { email };
     const role = await usersCollection.findOne(query);
     res.send(role);
+})
+
+//set sellers Products
+
+app.post('/products', async (req, res) => {
+    const product = req.body;
+    const result = await sellersProductsCollection.insertOne(product);
+    res.send(result);
 })
 
 
