@@ -60,6 +60,27 @@ app.post('/products', async (req, res) => {
 })
 
 
+//get my products
+
+app.get('/myProducts/:email', async (req, res) => {
+    const email = req.params.email;
+    const products = await sellersProductsCollection.find({ sellerEmail: email }).toArray();
+    res.send(products);
+})
+
+
+//set advertise product
+
+// app.patch('/advertise/:id', async (req, res) => {
+//     const id = req.params.id;
+//     console.log(id, 'hitted');
+//     res.send("hello")
+// })
+
+app.patch('/advertise/:id', (req, res) => {
+    res.send({ hello: 'hello' })
+})
+
 app.get('/', (req, res) => {
     res.send('hello');
 })
