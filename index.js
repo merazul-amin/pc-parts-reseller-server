@@ -6,28 +6,31 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
-
-
-
 //middleware
 app.use(cors());
 app.use(express.json());
 
-
-
 const uri = `mongodb+srv://${process.env.db_user}:${process.env.db_password}@cluster0.jnuj2ye.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 const categoriesCollection = client.db('assignment12').collection('categories');
-
-
+const productsCollection = client.db('assignment12').collection('products');
 
 //get all categories
 
 app.get('/categories', async (req, res) => {
     const categories = await categoriesCollection.find({}).toArray();
     res.send(categories);
+})
+
+
+//get products by category id
+
+app.get('/category/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = { categoryId: id };
+    const products = await productsCollection.find(query).toArray();
+    res.send(products);
 })
 
 
