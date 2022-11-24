@@ -98,6 +98,23 @@ app.delete('/seller/:id', async (req, res) => {
     res.send(result);
 })
 
+//get all buyers
+
+app.get('/buyers', async (req, res) => {
+    const query = { role: 'buyer' };
+    const users = await usersCollection.find(query).toArray();
+    res.send(users);
+})
+
+//delete a seller
+app.delete('/buyer/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+    const result = await usersCollection.deleteOne(query);
+    res.send(result);
+})
+
+
 app.get('/', (req, res) => {
     res.send('hello');
 })
