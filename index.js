@@ -4,6 +4,7 @@ require('dotenv').config();
 // const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
+const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000;
 
 //middleware
@@ -17,6 +18,30 @@ const categoriesCollection = client.db('assignment12').collection('categories');
 const productsCollection = client.db('assignment12').collection('products');
 const usersCollection = client.db('assignment12').collection('users');
 const sellersProductsCollection = client.db('assignment12').collection('sellersProducts');
+
+
+//function for check the validity of jwt token
+
+function verify(req, res, next) {
+    const token = req.headers.token;
+    jwt.verify(token, process.env.jwt_code, function (err, decoded) {
+        if (err) {
+            return res.status(403).send({ message: 'Unauthorized User' })
+        }
+        req.decoded = decoded;
+        next()
+    })
+}
+
+
+
+//Implement jwt token
+
+app.post('/jwt', async (req, res) => {
+    const email = req.body;
+    const token = jwt.sign(email, process.env.jwt_code, { expiresIn: '60h' });
+    res.send({ token });
+})
 
 //get all categories
 
@@ -55,7 +80,8 @@ app.get('/role/:email', async (req, res) => {
 
 app.post('/products', async (req, res) => {
     const product = req.body;
-    const result = await sellersProductsCollection.insertOne(product);
+    console.log(product);
+    const result = await productsCollection.insertOne(product);
     res.send(result);
 })
 
@@ -64,7 +90,7 @@ app.post('/products', async (req, res) => {
 
 app.get('/myProducts/:email', async (req, res) => {
     const email = req.params.email;
-    const products = await sellersProductsCollection.find({ sellerEmail: email }).toArray();
+    const products = await productsCollection.find({ sellerEmail: email }).toArray();
     res.send(products);
 })
 
