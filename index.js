@@ -18,6 +18,7 @@ const categoriesCollection = client.db('assignment12').collection('categories');
 const productsCollection = client.db('assignment12').collection('products');
 const usersCollection = client.db('assignment12').collection('users');
 const sellersProductsCollection = client.db('assignment12').collection('sellersProducts');
+const bookingCollection = client.db('assignment12').collection('bookings');
 
 
 //function for check the validity of jwt token
@@ -138,6 +139,22 @@ app.delete('/buyer/:id', async (req, res) => {
     const query = { _id: ObjectId(id) };
     const result = await usersCollection.deleteOne(query);
     res.send(result);
+})
+
+//add booking in db
+
+app.post('/booking', async (req, res) => {
+    const bookingDetails = req.body;
+    const result = await bookingCollection.insertOne(bookingDetails);
+    res.send(result);
+})
+
+//get all bookings
+
+app.get('/bookings/:email', async (req, res) => {
+    const email = req.params.email;
+    const bookings = await bookingCollection.find({ email }).toArray();
+    res.send(bookings);
 })
 
 
