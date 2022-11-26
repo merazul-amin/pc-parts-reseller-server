@@ -98,11 +98,25 @@ app.get('/myProducts/:email', async (req, res) => {
 
 //set advertise product
 
-// app.patch('/advertise/:id', async (req, res) => {
-//     const id = req.params.id;
-//     console.log(id, 'hitted');
-//     res.send("hello")
-// })
+app.patch('/advertise/:id', async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    const filter = { _id: ObjectId(id) };
+    const doc = {
+        $set: {
+            isAdvertised: true
+        }
+    }
+    const result = await productsCollection.updateOne(filter, doc)
+    res.send(result);
+})
+
+//get advertised Products
+
+app.get('/advertised', async (req, res) => {
+    const products = await productsCollection.find({ isAdvertised: true }).toArray();
+    res.send(products);
+})
 
 app.patch('/advertise/:id', (req, res) => {
     res.send({ hello: 'hello' })
