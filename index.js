@@ -149,7 +149,11 @@ app.delete('/seller/:id', async (req, res) => {
 
 //get all buyers
 
-app.get('/buyers', async (req, res) => {
+app.get('/buyers/:email', verify, async (req, res) => {
+    const email = req.params.email;
+    if (req.decoded.email !== email) {
+        return res.status(403).send({ message: 'Unauthorized User' })
+    }
     const query = { role: 'buyer' };
     const users = await usersCollection.find(query).toArray();
     res.send(users);
@@ -173,8 +177,11 @@ app.post('/booking', async (req, res) => {
 
 //get all bookings
 
-app.get('/bookings/:email', async (req, res) => {
+app.get('/bookings/:email', verify, async (req, res) => {
     const email = req.params.email;
+    if (req.decoded.email !== email) {
+        return res.status(403).send({ message: 'Unauthorized User' })
+    }
     const bookings = await bookingCollection.find({ email }).toArray();
     res.send(bookings);
 })
