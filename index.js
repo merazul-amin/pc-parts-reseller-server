@@ -69,6 +69,20 @@ app.post('/users', async (req, res) => {
     res.send(result);
 })
 
+//update seller verification
+
+app.patch('/users/:id', async (req, res) => {
+    const id = req.params.id;
+    const filter = { _id: ObjectId(id) };
+    const doc = {
+        $set: {
+            isVerified: true
+        }
+    }
+    const result = await usersCollection.updateOne(filter, doc);
+    res.send(result);
+})
+
 //get user role
 app.get('/role/:email', async (req, res) => {
     const email = req.params.email;
@@ -81,7 +95,6 @@ app.get('/role/:email', async (req, res) => {
 
 app.post('/products', async (req, res) => {
     const product = req.body;
-    console.log(product);
     const result = await productsCollection.insertOne(product);
     res.send(result);
 })
@@ -90,7 +103,6 @@ app.post('/products', async (req, res) => {
 
 app.delete('/products/:id', async (req, res) => {
     const id = req.params.id;
-    console.log(id);
     const query = { _id: ObjectId(id) };
     const result = await productsCollection.deleteOne(query);
     res.send(result);
@@ -110,7 +122,6 @@ app.get('/myProducts/:email', async (req, res) => {
 
 app.patch('/advertise/:id', async (req, res) => {
     const id = req.params.id;
-    console.log(id);
     const filter = { _id: ObjectId(id) };
     const doc = {
         $set: {
