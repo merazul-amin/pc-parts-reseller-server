@@ -86,6 +86,16 @@ app.post('/products', async (req, res) => {
     res.send(result);
 })
 
+//remove sellers product
+
+app.delete('/products/:id', async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    const query = { _id: ObjectId(id) };
+    const result = await productsCollection.deleteOne(query);
+    res.send(result);
+})
+
 
 //get my products
 
@@ -111,6 +121,7 @@ app.patch('/advertise/:id', async (req, res) => {
     res.send(result);
 })
 
+
 //get advertised Products
 
 app.get('/advertised', async (req, res) => {
@@ -118,9 +129,6 @@ app.get('/advertised', async (req, res) => {
     res.send(products);
 })
 
-app.patch('/advertise/:id', (req, res) => {
-    res.send({ hello: 'hello' })
-})
 
 
 //get all sellers
